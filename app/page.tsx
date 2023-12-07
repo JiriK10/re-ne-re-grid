@@ -1,10 +1,18 @@
-/* Components */
-import { Counter } from './components/Counter/Counter'
+"use client"
+
+import { useDispatch, fetchAsync } from "@/lib/redux"
+
+import Grid from "./components/Grid/Grid"
+
+// TODO: dogs page s redux api fetch ????
 
 export default function IndexPage() {
-  return <Counter />
-}
+  const dispatch = useDispatch()
+  dispatch(fetchAsync())
 
-export const metadata = {
-  title: 'Redux Toolkit',
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-between p-4">
+      <Grid />
+    </main>
+  )
 }
