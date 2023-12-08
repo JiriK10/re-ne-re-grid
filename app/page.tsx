@@ -4,8 +4,6 @@ import { useDispatch, fetchAsync } from "@/lib/redux"
 
 import Grid from "./components/Grid/Grid"
 
-// TODO: dogs page s redux api fetch ????
-
 export default function IndexPage() {
   const dispatch = useDispatch()
   dispatch(fetchAsync())

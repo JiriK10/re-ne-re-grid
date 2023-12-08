@@ -1,6 +1,8 @@
 "use client"
 
+import { useState } from "react"
 import classNames from "classnames"
+import { useSnackbar } from "notistack"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faCaretDown,
@@ -8,12 +10,19 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons"
 
+import Button from "@mui/material/Button"
+import Dialog from "@mui/material/Dialog"
+import DialogActions from "@mui/material/DialogActions"
+import DialogContent from "@mui/material/DialogContent"
+import DialogContentText from "@mui/material/DialogContentText"
+import DialogTitle from "@mui/material/DialogTitle"
+
 import {
   exampleDataSlice,
   useDispatch,
   useSelector,
   selectItem,
-  selectItemHasChildren,
+  selectChildrenTree,
 } from "@/lib/redux"
 
 import Grid from "./Grid"
@@ -33,7 +42,8 @@ export default function GridRow({ itemId, striped = false }: GridRowProps) {
 
   const rowProps = Object.keys(item.data)
   const rowColor = striped ? "bg-neutral-300" : "bg-neutral-100"
-  const hasChildren = useSelector(selectItemHasChildren(itemId))
+  const childrenTree = useSelector(selectChildrenTree(itemId))
+  const hasChildren = childrenTree.length > 0
 
   let subGrid = null
   if (item.opened && hasChildren) {
@@ -46,13 +56,31 @@ export default function GridRow({ itemId, striped = false }: GridRowProps) {
     )
   }
 
+  const { enqueueSnackbar } = useSnackbar()
+  const [dialogOpen, setDialogOpen] = useState(false)
+
+  function closeDialog() {
+    setDialogOpen(false)
+  }
+
+  function confirmDialog() {
+    closeDialog()
+
+    let deletedIds = [itemId, ...childrenTree.map((ch) => ch.Id)]
+    enqueueSnackbar(`Deleted ID(s): ${deletedIds.join(", ")}`, {
+      variant: "success",
+    })
+
+    dispatch(exampleDataSlice.actions.remove(itemId))
+  }
+
   return (
     <>
       <tr
         className={classNames("text-neutral-800", rowColor, {
           "cursor-pointer": hasChildren,
         })}
-        onClick={(e) =>
+        onClick={() =>
           hasChildren && dispatch(exampleDataSlice.actions.toggle(itemId))
         }
       >
@@ -72,13 +100,27 @@ export default function GridRow({ itemId, striped = false }: GridRowProps) {
           className="w-20 text-lg text-red-500 hover:text-red-700 cursor-pointer"
           onClick={(e) => {
             e.stopPropagation()
-            dispatch(exampleDataSlice.actions.remove(itemId))
+            setDialogOpen(true)
           }}
         >
           <FontAwesomeIcon icon={faTrashCan} />
         </td>
       </tr>
       {subGrid}
+      <Dialog open={dialogOpen} onClose={closeDialog}>
+        <DialogTitle>Confirm delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Do you want to delete this row with its children?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDialog}>Cancel</Button>
+          <Button color="error" onClick={confirmDialog} autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   )
 }

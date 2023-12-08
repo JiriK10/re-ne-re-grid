@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit"
 
-import type { ReduxState } from "@/lib/redux"
+import type { ExampleDataItem, ReduxState } from "@/lib/redux"
 
 export const selectItems = (state: ReduxState) => state.exampleData.items
 
@@ -8,6 +8,19 @@ export const selectChildren = (parentId?: number) =>
   createSelector(selectItems, (items) =>
     items.filter((item) => item.parentId === parentId)
   )
+
+let getFlattenChildrenTree = (
+  items: Array<ExampleDataItem>,
+  itemId: number
+): Array<ExampleDataItem> => {
+  const children = items.filter((i) => i.parentId == itemId)
+  return children.flatMap((child) => {
+    return [child, ...getFlattenChildrenTree(items, child.Id)]
+  })
+}
+
+export const selectChildrenTree = (itemId: number) =>
+  createSelector(selectItems, (items) => getFlattenChildrenTree(items, itemId))
 
 export const selectItem = (itemId: number) =>
   createSelector(selectItems, (items) =>
