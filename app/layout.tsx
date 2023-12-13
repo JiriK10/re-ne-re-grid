@@ -7,10 +7,7 @@ import "@fontsource/roboto/400.css"
 import "@fontsource/roboto/500.css"
 import "@fontsource/roboto/700.css"
 
-import styles from "./styles/layout.module.css" // TODO: Smazat???
 import "./styles/globals.css"
-
-import { Nav } from "./components/Nav"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -24,12 +21,7 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
   return (
     <Providers>
       <html lang="en">
-        <body className={inter.className}>
-          <section className={styles.container}>
-            <Nav />
-            {children}
-          </section>
-        </body>
+        <body className={inter.className}>{children}</body>
       </html>
     </Providers>
   )
