@@ -2,18 +2,22 @@
 
 import Link from "next/link"
 import { styled, Theme, CSSObject } from "@mui/material/styles"
-import Divider from "@mui/material/Divider"
+import {
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material"
 import MuiDrawer, { DrawerProps as MuiDrawerProps } from "@mui/material/Drawer"
-import IconButton from "@mui/material/IconButton"
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft"
-import CottageIcon from "@mui/icons-material/Cottage"
-import BrowserNotSupportedIcon from "@mui/icons-material/BrowserNotSupported"
-import QuestionMarkIcon from "@mui/icons-material/QuestionMark"
-import List from "@mui/material/List"
-import ListItem from "@mui/material/ListItem"
-import ListItemButton from "@mui/material/ListItemButton"
-import ListItemIcon from "@mui/material/ListItemIcon"
-import ListItemText from "@mui/material/ListItemText"
+import {
+  BrowserNotSupported as BrowserNotSupportedIcon,
+  Cottage as CottageIcon,
+  ChevronLeft as ChevronLeftIcon,
+  QuestionMark as QuestionMarkIcon,
+} from "@mui/icons-material"
 
 interface AppDrawerProps extends MuiDrawerProps {
   drawerWidth: number

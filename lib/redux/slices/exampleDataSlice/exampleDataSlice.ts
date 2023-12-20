@@ -24,6 +24,10 @@ export const exampleDataSlice = createSlice({
         item.opened = !item.opened
       }
     },
+    // Adds new item
+    add: (state, item: PayloadAction<ExampleDataItem>) => {
+      state.items.push(item.payload)
+    },
     // Removes item and whole tree of its children
     remove: (state, itemId: PayloadAction<number>) => {
       let itemsToRemove: Array<number> = []

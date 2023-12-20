@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useTheme } from "@mui/material/styles"
-import Box from "@mui/material/Box"
+import { Box } from "@mui/material"
 
 import AppBar from "./AppBar"
 import AppDrawer, { AppDrawerHeader } from "./AppDrawer"

@@ -2,20 +2,13 @@
 
 import { useState } from "react"
 import classNames from "classnames"
-import { useSnackbar } from "notistack"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faCaretDown,
   faCaretRight,
+  faSquarePlus,
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons"
-
-import Button from "@mui/material/Button"
-import Dialog from "@mui/material/Dialog"
-import DialogActions from "@mui/material/DialogActions"
-import DialogContent from "@mui/material/DialogContent"
-import DialogContentText from "@mui/material/DialogContentText"
-import DialogTitle from "@mui/material/DialogTitle"
 
 import {
   exampleDataSlice,
@@ -26,6 +19,8 @@ import {
 } from "@/lib/redux"
 
 import Grid from "./Grid"
+import GridRowAddDialog from "./GridRowAddDialog"
+import GridRowDeleteDialog from "./GridRowDeleteDialog"
 
 interface GridRowProps {
   itemId: number
@@ -35,6 +30,7 @@ interface GridRowProps {
 export default function GridRow({ itemId, striped = false }: GridRowProps) {
   const item = useSelector(selectItem(itemId))
   if (item == null) {
+    console.error("GridRow: itemId not found", itemId)
     return null
   }
 
@@ -56,28 +52,13 @@ export default function GridRow({ itemId, striped = false }: GridRowProps) {
     )
   }
 
-  const { enqueueSnackbar } = useSnackbar()
-  const [dialogOpen, setDialogOpen] = useState(false)
-
-  function closeDialog() {
-    setDialogOpen(false)
-  }
-
-  function confirmDialog() {
-    closeDialog()
-
-    let deletedIds = [itemId, ...childrenTree.map((ch) => ch.Id)]
-    enqueueSnackbar(`Deleted ID(s): ${deletedIds.join(", ")}`, {
-      variant: "success",
-    })
-
-    dispatch(exampleDataSlice.actions.remove(itemId))
-  }
+  const [addDialogOpen, setAddDialogOpen] = useState(false)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 
   return (
     <>
       <tr
-        className={classNames("text-neutral-800", rowColor, {
+        className={classNames("text-neutral-800 hover:text-primary", rowColor, {
           "cursor-pointer": hasChildren,
         })}
         onClick={() =>
@@ -95,32 +76,38 @@ export default function GridRow({ itemId, striped = false }: GridRowProps) {
             {item.data[prop]}
           </td>
         ))}
-        <td
-          title="Delete item"
-          className="w-20 text-lg text-red-500 hover:text-red-700 cursor-pointer"
-          onClick={(e) => {
-            e.stopPropagation()
-            setDialogOpen(true)
-          }}
-        >
-          <FontAwesomeIcon icon={faTrashCan} />
+        <td className="px-4 py-2 whitespace-nowrap">
+          <FontAwesomeIcon
+            icon={faSquarePlus}
+            title="Add new child"
+            className="p-3 text-xl text-green-600 hover:text-green-800 cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation()
+              setAddDialogOpen(true)
+            }}
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            title="Delete item"
+            className="p-3 text-xl text-red-500 hover:text-red-700 cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation()
+              setDeleteDialogOpen(true)
+            }}
+          />
         </td>
       </tr>
       {subGrid}
-      <Dialog open={dialogOpen} onClose={closeDialog}>
-        <DialogTitle>Confirm delete</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Do you want to delete this row with its children?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeDialog}>Cancel</Button>
-          <Button color="error" onClick={confirmDialog} autoFocus>
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <GridRowAddDialog
+        parentId={itemId}
+        open={addDialogOpen}
+        onClose={() => setAddDialogOpen(false)}
+      />
+      <GridRowDeleteDialog
+        itemId={itemId}
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+      />
     </>
   )
 }

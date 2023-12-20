@@ -9,6 +9,9 @@ export const selectChildren = (parentId?: number) =>
     items.filter((item) => item.parentId === parentId)
   )
 
+export const selectFirstChild = (parentId?: number) =>
+  createSelector(selectChildren(parentId), (items) => items[0])
+
 let getFlattenChildrenTree = (
   items: Array<ExampleDataItem>,
   itemId: number

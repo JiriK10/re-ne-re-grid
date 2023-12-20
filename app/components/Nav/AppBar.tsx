@@ -3,14 +3,12 @@
 import React, { useState } from "react"
 import { styled } from "@mui/material/styles"
 import useScrollTrigger from "@mui/material/useScrollTrigger"
+import { Badge, Box, IconButton, Toolbar, Typography } from "@mui/material"
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar"
-import Box from "@mui/material/Box"
-import Toolbar from "@mui/material/Toolbar"
-import Typography from "@mui/material/Typography"
-import Badge from "@mui/material/Badge"
-import IconButton from "@mui/material/IconButton"
-import MenuIcon from "@mui/icons-material/Menu"
-import NotificationsIcon from "@mui/icons-material/Notifications"
+import {
+  Menu as MenuIcon,
+  Notifications as NotificationsIcon,
+} from "@mui/icons-material"
 
 interface AppBarProps extends MuiAppBarProps {
   drawerWidth: number
