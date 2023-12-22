@@ -63,12 +63,20 @@ export default function GridRowFormDialog({
   onSubmit,
   onClose,
 }: GridRowFormDialogProps) {
-  const firstChild = useSelector(selectFirstChild(parentId))
-  if (firstChild == null) {
-    console.error("GridRowFormDialog: parentId not found", parentId)
-    return null
-  }
   let item = itemId != null ? useSelector(selectItem(itemId)) : null
+  if (itemId != null && parentId == null) {
+    parentId = item!.parentId
+  }
+
+  let firstChild = useSelector(selectFirstChild(parentId))
+  if (firstChild == null) {
+    // No columns template from parent first child -> use 1 from each type columns
+    firstChild = {
+      Id: 0,
+      data: { String: "", Number: "", DateTime: "", Boolean: "" },
+    }
+  }
+
   if (item != null && item.parentId != parentId) {
     console.error(
       "GridRowFormDialog: item has different parentId",
@@ -117,6 +125,7 @@ export default function GridRowFormDialog({
           <Box sx={{ minWidth: 400 }} className="flex flex-col">
             {rowProps.map((prop) => (
               <GridRowFormField
+                key={prop}
                 fieldInfo={fieldInfos[prop]}
                 value={item != null ? item.data[prop] : null}
                 error={

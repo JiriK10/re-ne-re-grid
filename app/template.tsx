@@ -14,7 +14,7 @@ import tailwindConfigRaw from "../tailwind.config.ts"
 const tailwindConfig = resolveConfig(tailwindConfigRaw)
 const theme = createTheme({
   palette: {
-    primary: { main: (tailwindConfig.theme.colors as any).primary },
+    primary: { main: (tailwindConfig.theme.colors as any).primary.DEFAULT },
   },
 })
 

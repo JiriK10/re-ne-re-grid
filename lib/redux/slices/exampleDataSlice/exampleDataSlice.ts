@@ -27,6 +27,14 @@ export const exampleDataSlice = createSlice({
     // Adds new item
     add: (state, item: PayloadAction<ExampleDataItem>) => {
       state.items.push(item.payload)
+      // Open parent if collapsed
+      let parentItem =
+        item.payload.parentId != null
+          ? state.items.find((si) => si.Id == item.payload.parentId)
+          : null
+      if (parentItem != null && !parentItem.opened) {
+        parentItem.opened = true
+      }
     },
     // Removes item and whole tree of its children
     remove: (state, itemId: PayloadAction<number>) => {
@@ -44,6 +52,15 @@ export const exampleDataSlice = createSlice({
       state.items = state.items.filter(
         (item) => !itemsToRemove.includes(item.Id)
       )
+    },
+    update: (state, item: PayloadAction<ExampleDataItem>) => {
+      let currItem = state.items.find((si) => si.Id == item.payload.Id)
+      if (currItem != null) {
+        currItem.data = {
+          ID: currItem.data.ID,
+          ...item.payload.data,
+        }
+      }
     },
   },
   extraReducers: (builder) => {

@@ -4,16 +4,19 @@ import { useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faSquarePlus } from "@fortawesome/free-solid-svg-icons"
 
-import { useSelector, selectItem } from "@/lib/redux"
+import { useSelector, selectItem, ExampleDataItem } from "@/lib/redux"
 
 import GridRowAddDialog from "./GridRowAddDialog"
 
 interface GridHeaderProps {
-  itemId: number
+  itemId: number | null
 }
 
 export default function GridHeader({ itemId }: GridHeaderProps) {
-  const item = useSelector(selectItem(itemId))
+  const item =
+    itemId != null
+      ? useSelector(selectItem(itemId))
+      : ({ data: {} } as ExampleDataItem)
   if (item == null) {
     console.error("GridHeader: itemId not found", itemId)
     return null
@@ -27,7 +30,7 @@ export default function GridHeader({ itemId }: GridHeaderProps) {
       <tr className="bg-primary text-white">
         <th
           title="Add new item"
-          className="text-xl hover:text-neutral-200 cursor-pointer"
+          className="px-4 py-2 text-xl hover:text-neutral-200 cursor-pointer"
           onClick={() => setDialogOpen(true)}
         >
           <FontAwesomeIcon icon={faSquarePlus} />

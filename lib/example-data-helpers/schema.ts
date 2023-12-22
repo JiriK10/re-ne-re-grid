@@ -1,4 +1,5 @@
 import { z } from "zod"
+import moment from "moment"
 
 export enum SchemaFieldType {
   String = "string",
@@ -20,9 +21,11 @@ export interface SchemaFieldInfos {
 const fieldIgnore = ["id"]
 
 const fieldMap: { [key: string]: SchemaFieldType } = {
+  Boolean: SchemaFieldType.Boolean,
   "Is alive?": SchemaFieldType.Boolean,
   "Knows the answer?": SchemaFieldType.Boolean,
 
+  Number: SchemaFieldType.Number,
   "Beer consumption (l/y)": SchemaFieldType.Number,
   "Character ID": SchemaFieldType.Number,
   "Minimal distance": SchemaFieldType.Number,
@@ -30,6 +33,7 @@ const fieldMap: { [key: string]: SchemaFieldType } = {
   Weight: SchemaFieldType.Number,
   Years: SchemaFieldType.Number,
 
+  DateTime: SchemaFieldType.DateTime,
   Born: SchemaFieldType.DateTime,
   "In space since": SchemaFieldType.DateTime,
 }
@@ -73,7 +77,7 @@ export function SchemaFromFieldInfos(fieldInfos: SchemaFieldInfos) {
       case SchemaFieldType.DateTime:
         schemaProp = z
           .string(params)
-          .datetime({ message: params.invalid_type_error, offset: true })
+          .refine((value) => moment(value).isValid, params.invalid_type_error)
         if (required) {
           schemaProp = z
             .string(params)

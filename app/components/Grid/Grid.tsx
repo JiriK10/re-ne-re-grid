@@ -12,18 +12,19 @@ interface GridProps {
 export default function Grid({ parentId }: GridProps) {
   const items = useSelector(selectChildren(parentId))
 
-  if (items.length < 1) {
+  if (parentId != null && items.length < 1) {
     return null
   }
 
+  const firstChildId = items?.length > 0 ? items[0].Id : null
   return (
     <>
       <table className="text-center">
         <thead>
-          <GridHeader key={`gh-${items[0].Id}`} itemId={items[0].Id} />
+          <GridHeader key={`gh-${firstChildId}`} itemId={firstChildId} />
         </thead>
         <tbody>
-          {items.map((item, index) => (
+          {items?.map((item, index) => (
             <GridRow
               key={`gr-${item.Id}`}
               itemId={item.Id}

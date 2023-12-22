@@ -29,11 +29,16 @@ export default function GridRowFormField({
   switch (fieldInfo.type) {
     case SchemaFieldType.Boolean:
       return (
-        <FormGroup key={property}>
+        <FormGroup>
           <FormControlLabel
             label={label}
             control={
-              <Checkbox name={property} defaultChecked={Boolean(value)} />
+              <Checkbox
+                name={property}
+                defaultChecked={
+                  value === true || value?.toLowerCase() === "true"
+                }
+              />
             }
           />
           <FormHelperText>{error}</FormHelperText>
@@ -42,10 +47,10 @@ export default function GridRowFormField({
     case SchemaFieldType.DateTime:
       return (
         <DateTimePicker
-          key={property}
           name={property}
           label={label}
-          format="YYYY-MM-DDTHH:mm:ssZ" // ISO8601
+          format="YYYY-MM-DD HH:mm:ss"
+          ampm={false}
           slotProps={{
             field: { clearable: true },
             textField: {
@@ -63,7 +68,6 @@ export default function GridRowFormField({
     default:
       return (
         <TextField
-          key={property}
           name={property}
           label={label}
           size="small"
