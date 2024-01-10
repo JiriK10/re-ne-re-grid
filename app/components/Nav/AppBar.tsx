@@ -8,7 +8,10 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar"
 import {
   Menu as MenuIcon,
   Notifications as NotificationsIcon,
+  Refresh as RefreshIcon,
 } from "@mui/icons-material"
+
+import { useDispatch, fetchExampleData } from "@/lib/redux"
 
 interface AppBarProps extends MuiAppBarProps {
   drawerWidth: number
@@ -49,7 +52,9 @@ const StyledAppBar = styled(MuiAppBar, {
 
 export default function AppBar(props: AppBarProps) {
   const { title, open, onDrawerOpen } = props
+  const dispatch = useDispatch()
   const [notifications, setNotifications] = useState(42)
+
   return (
     <OnScroll>
       <StyledAppBar position="fixed" {...props}>
@@ -73,6 +78,15 @@ export default function AppBar(props: AppBarProps) {
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <IconButton
+              size="large"
+              aria-label="Reset grid"
+              color="inherit"
+              title="Reset grid"
+              onClick={() => dispatch(fetchExampleData())}
+            >
+              <RefreshIcon />
+            </IconButton>
             <IconButton
               size="large"
               aria-label="Show fake new notifications"

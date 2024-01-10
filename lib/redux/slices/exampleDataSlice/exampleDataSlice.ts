@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 
 import { ExampleDataItem } from "./types"
-import { fetchAsync } from "./thunks"
+import { fetchExampleData } from "./thunks"
 
 export interface ExampleDataSliceState {
   items: Array<ExampleDataItem>
@@ -65,10 +65,10 @@ export const exampleDataSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAsync.pending, (state) => {
+      .addCase(fetchExampleData.pending, (state) => {
         state.status = "loading"
       })
-      .addCase(fetchAsync.fulfilled, (state, action) => {
+      .addCase(fetchExampleData.fulfilled, (state, action) => {
         state.status = "idle"
         state.items = action.payload ?? []
       })

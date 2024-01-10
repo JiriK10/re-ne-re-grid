@@ -2,6 +2,8 @@ import { createSelector } from "@reduxjs/toolkit"
 
 import type { ExampleDataItem, ReduxState } from "@/lib/redux"
 
+export const selectStatus = (state: ReduxState) => state.exampleData.status
+
 export const selectItems = (state: ReduxState) => state.exampleData.items
 
 export const selectChildren = (parentId?: number) =>
