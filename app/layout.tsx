@@ -12,8 +12,8 @@ import "./styles/globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "React/Next/Redux grid",
-  description: "My React/Next/Redux playground 😉",
+  title: "React/Next/Redux/MUI grid",
+  description: "My React / Next.js / Redux / Material UI playground 😉",
 }
 export const viewport = { width: "device-width", initialScale: 1 }
 

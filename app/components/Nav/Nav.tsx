@@ -16,7 +16,7 @@ export default function Nav({ children }: React.PropsWithChildren) {
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar
-        title="My React/Next/Redux playground"
+        title="My React / Next.js / Redux / Material UI playground"
         position="fixed"
         drawerWidth={drawerWidth}
         open={open}
